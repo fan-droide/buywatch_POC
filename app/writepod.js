@@ -3,7 +3,7 @@
 import { buttonCreate } from './ui'
 import { initDragDropFile } from './dragdrop'
 import { session } from './login'
-
+import {API_URL, PAYMENT_TOKEN} from './config'
 import {
     addUrl,
     addStringNoLocale,
@@ -27,11 +27,11 @@ const mediaContentPath = 'Media-Content/NewList/'
 
 let newSellObj = {}
 
-const urlApiGetItems = 'http://localhost:3001/api/getitems'
+const urlApiGetItems = API_URL+'/getitems'
 
 let listOfItems = {}
 
-const session_uPayment = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1rTTJPRGMxUVRKR05qSXlRelJFUmtKQk5qRTNNMFpCTkRsRFJEQkVSVFF3UWpWRk5VSkNNdyJ9.eyJpc3MiOiJodHRwczovL3hwcmluZ3NhbmRib3guYXV0aDAuY29tLyIsInN1YiI6ImdpdGh1YnwzNjAwNTQwIiwiYXVkIjpbImh0dHBzOi8vamMuaWxwdjQuZGV2IiwiaHR0cHM6Ly94cHJpbmdzYW5kYm94LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2ODI3OTc5NDYsImV4cCI6MTY4Mjg4NDM0NiwiYXpwIjoiMHIxZnJaNTlleWxEc01IM2FjVmVTSkQ1S0k2cHVFaG8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIn0.0LaARYA2nuXNS4jgEN8RDhRrbuIcRqZonEMrRK0ghcnzkoc11vBqw4wi3Ygg33ZwTLElE4OJIJjud_AM4MhpzWDjT4UBbweGcKS_yeKztmzCtZWgpUGbXTW-zVnYLsLnTiZ4uMV6i9Hpt_x9Cp11f8JcQOeC4aG-M-nt5GO8CFDVPAiMG73_dBptYzSLbjUI5lVioStAUCqr1WnFzkvxE-uKkfkhGV_Rgqwj9sRvAVO-Mha9P9RMm7vm9f-CKQY-7HfYUiv0JKvnUpgzrrYIBIbXCFzeQ4atUxTb5H4DvVEAIotvL2czpNjExT-pMpQRE35-EFpTkuF_jxG_inspcQ'
+const session_uPayment = PAYMENT_TOKEN
 
 async function createFileInfo() {
    
@@ -75,7 +75,7 @@ async function createFileInfo() {
                 newSellObj.name = item_name
                 newSellObj.payment = item_payment
                 newSellObj.sellerWebId = session.info.webId
-                const sendToBackend = await sendPost(newSellObj) // needs to be fixed
+                const sendToBackend = await sendNewItemInfo(newSellObj) 
                 console.log('Sent to backend ', sendToBackend)
             }
 
@@ -117,26 +117,12 @@ async function writeFileToPod(file, targetFileURL) {
     }
 }
 
-async function sendPost(fileInfo) {
-
-    await fetch('http://localhost:3001/api/newitem', {
-
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(fileInfo),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Success:', data)
-        return data
-    })
-    .catch((error) => {
-        console.error('Error:', error)
-        return error
-    })
+async function sendNewItemInfo(fileInfo) {
+    const header = {
+        'Content-Type': 'application/json',
+    }
+    const newItemResp = await genericPost(fileInfo, API_URL+'/newitem', header)
+    return newItemResp     
 }
 
 async function askForAccess(id) {
@@ -146,24 +132,11 @@ async function askForAccess(id) {
         resourceUrl: itemIs.resourceUrl,
         buyerWebId: session.info.webId
     }
-    await fetch('http://localhost:3001/api/buy', {
-
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataPurchase),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Success:', data)
-        return data
-    })
-    .catch((error) => {
-        console.error('Error:', error)
-        return error
-    })
+    const header = {
+        'Content-Type': 'application/json',
+    }
+    const accessResp = await genericPost(dataPurchase, API_URL+'/buy', header)
+    return accessResp       
 }
 
 async function getListItems() {
@@ -190,12 +163,11 @@ async function getListItems() {
 
 async function readFileFromPod(fileURL) {
     try {
-        // file is a Blob (see https://developer.mozilla.org/docs/Web/API/Blob)
+        
         const file = await getFile(
-            fileURL,               // File in Pod to Read
-            { fetch: session.fetch }       // fetch from authenticated session
-        )
-        console.log(file)
+            fileURL,               
+            { fetch: session.fetch }       
+        )        
         console.log(`Fetched a ${getContentType(file)} file from ${getSourceUrl(file)}.`)
         console.log(`The file is ${isRawData(file) ? "not " : ""}a dataset.`)
         return { ok: true, content: file }
@@ -230,16 +202,26 @@ async function fetchResource(id) {
 }
 
 async function startPurchaseProcess(id) {
-
-    let fromPerson = prompt('Please enter your payment user name', '')
-    if (fromPerson !== null) {
-        await sendMoney(id, fromPerson)
-        // TODO: if payment successful then ask for access
-        // Ideal Flow: the buyer pays the backend and the backend pays the seller
-        // so there´s no need from the backend to validate or confirma buyer's payment
-        // it receives the money and then is able to pay the seller
-        await askForAccess(id)
+    if(session.info.isLoggedIn){
+        let fromPerson = prompt('Please enter your payment user name', '')
+        if (fromPerson !== null) {
+            const thePayment = await sendMoney(id, fromPerson)
+            if(thePayment.ok){
+                console.log(thePayment)
+                // TODO: check if thePayment.resp.successfulPayment is true
+                // Ideal Flow: the buyer pays the backend and the backend pays the seller
+                // so there´s no need from the backend to validate or confirma buyer's payment
+                // it receives the money and then is able to pay the seller
+                const respAccess = await askForAccess(id)                
+                if(respAccess.ok){
+                    alert('Access Granted')
+                }                
+            }            
+        }
+    } else {
+        alert('Please Login before Buying')
     }
+    
 }
 
 function catchError(err) {
@@ -271,27 +253,32 @@ async function sendMoney(itemId, fromUser) {
         amount: amountConverted,
         destinationPaymentPointer: itemIs.payment || "$money.ilpv4.dev/gilpanal"
     }
+    const header = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${session_uPayment}`
+    }
+    const moneyResp = await genericPost(dataPurchase, `https://hermes-rest.ilpv4.dev/accounts/${fromUser}/pay`, header)
+    return moneyResp   
+}
 
-    await fetch(`https://hermes-rest.ilpv4.dev/accounts/${fromUser}/pay`, {
+async function genericPost(data, url, headers){
+    let reply = {error:null}
+    try {
+        const sendRqst = await fetch(url, {
 
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${session_uPayment}`
-        },
-        body: JSON.stringify(dataPurchase),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Success:', data)
-        return data
-    })
-    .catch((error) => {
-        console.error('Error:', error)
-        return error
-    })
+            credentials: 'include',
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data),
+        })
+        const respJson = await sendRqst.json()
+        reply = {ok: true, resp:respJson}
+    } catch(err){
+        reply.error = err
+    }
+   
+    return reply  
 }
 
 buttonCreate.onclick = function () {

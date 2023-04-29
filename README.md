@@ -11,4 +11,8 @@ NOTE: do not run npm i otherwise the code will not work, might be related to @in
 
 rename config.tamplate.js to config.js
 
+Get a valid PAYMENT_TOKEN from https://wallet.ilpv4.dev/
+
 npm start
+
+Open http://localhost:3001

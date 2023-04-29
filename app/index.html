@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>BuyWatch</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="dragdrop.css" />
+</head>
+
+<body>
+    <header>
+        <h2>BuyWatch POC</h2>
+        <h3>SOLID + Web Monetization </h3>
+    </header>
+    <div class="wrapper">
+        <div class="tabs">
+            <div class="tab">
+                <input type="radio" name="css-tabs" id="tab-1" checked class="tab-switch">
+                <label for="tab-1" class="tab-label">Login</label>
+                <div class="tab-content">
+                    <section id="login" class="panel">
+                        <div class="row">
+                            <label id="labelIdP" for="select-idp">1. Select your Identity Provider: </label>
+                            <select id="select-idp" name="select-idp">
+                                <option value="">--Please select an Identity Provider (IdP)--</option>
+                                <option value="https://login.inrupt.com">https://login.inrupt.com (PodSpaces)</option>
+                                <option value="https://solidcommunity.net">https://solidcommunity.net (Solid Community)
+                                </option>
+                                <option value="http://localhost:3000">http://localhost:3000 (MashLib)</option>
+                            </select>
+                            <button name="btnLogin" id="btnLogin">Login</button>
+                        </div>
+                    </section>
+                    <div id="read" class="panel" hidden>
+                        <div class="row">
+                            <label id="readlabel" for="myWebID">2. Logged in with your WebID: </label>
+                            <input type="text" id="myWebID" name="myWebID" size="50" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab">
+                <input type="radio" name="css-tabs" id="tab-2" class="tab-switch">
+                <label for="tab-2" class="tab-label">Upload Form</label>
+                <div class="tab-content">
+                    <div id="write" class="panel" hidden>
+                        <div class="row">
+                            <label id="writelabel">3. Fill the form.</label>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div>
+                                <label id="podlabel" for="select-pod">a. New Media in your Pod: </label>
+                                <select id="select-pod" name="select-pod" widths: 120>
+                                    <option value="">--Please select your Pod--</option>
+                                </select>@ Media-Content/NewList/
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div>
+                                <label id="listLabel" for="titles">b. Select a Price: </label>
+                                <input type="number" step="1" class="form-control" name="price" id="price"
+                                    placeholder="How much does this cost" value="0" min="0" required>
+                                <span>XRP</span>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <label id="listLabel" for="titles">c. Write a Name: </label>
+                                <input type="text" class="form-control" name="itemname" id="itemname"
+                                    placeholder="Title for the file" required>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <label id="listLabel" for="titles">d. Include Payment Endpoint: </label>
+                                <input type="text" class="form-control" name="paymententry" id="paymententry"
+                                    placeholder="" size="30" value="$money.ilpv4.dev/" required>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <p>
+                                <label id="dropContainerLabel" for="dropContainer">d. Drop Here the File: </label>
+                            </p>                            
+                        </div>
+                        <div class="row">
+                            <div class="drop-zone">
+                                <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                                <input type="file" name="myFile" class="drop-zone__input">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <p>
+                                <button name="btnCreate" id="btnCreate">Send New Data to Pod</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab">
+                <input type="radio" name="css-tabs" id="tab-3" class="tab-switch">
+                <label for="tab-3" class="tab-label">Market</label>
+                <div class="tab-content">
+                    <div id="localStoraged" class="panel">
+                        <div class="row">
+                            <label>Available Content: </label>
+                            <ul id="marketlist"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script defer src="./dragdrop.js"></script>
+<script defer src="./writepod.js"></script>
+<script defer src="./readpod.js"></script>
+<script defer src="./login.js"></script>
+
+</html>

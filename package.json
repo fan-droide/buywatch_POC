@@ -1,0 +1,32 @@
+{
+  "name": "node_web_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js & npx parcel app/index.html app/myappid.jsonld",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@inrupt/solid-client-authn-node": "^1.13.0",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "@inrupt/solid-client": "^1.25.0",
+    "@inrupt/solid-client-authn-browser": "^1.12.3",
+    "@inrupt/vocab-common-rdf": "^1.0.5",
+    "buffer": "^6.0.3",
+    "parcel-bundler": "^1.12.5"
+  },
+  "browserslist": [
+    "last 3 and_chr versions",
+    "last 3 chrome versions",
+    "last 3 opera versions",
+    "last 3 ios_saf versions",
+    "last 3 safari versions",
+    "last 3 edge versions"
+  ]
+}

@@ -27,6 +27,8 @@ const mediaContentPath = 'Media-Content/NewList/'
 
 let newSellObj = {}
 
+let fileToSend = null
+
 const urlApiGetItems = API_URL+'/getitems'
 
 let listOfItems = {}
@@ -75,8 +77,11 @@ async function createFileInfo() {
                 newSellObj.name = item_name
                 newSellObj.payment = item_payment
                 newSellObj.sellerWebId = session.info.webId
-                const sendToBackend = await sendNewItemInfo(newSellObj) 
-                console.log('Sent to backend ', sendToBackend)
+                const sendToBackend = await sendNewItemInfo(newSellObj)
+                if(sendToBackend.ok){
+                    console.log('Sent to backend ', sendToBackend)
+                    getListItems()
+                }                
             }
 
         } catch (error) {
@@ -93,28 +98,32 @@ function handleFiles(files) {
     const podUrl = document.getElementById('select-pod').value
     if (podUrl) {
         const fileList = Array.from(files)
-        fileList.forEach(file => {
-            writeFileToPod(file, `${podUrl}${mediaContentPath}${file.name}`)
-        })
+        fileToSend = fileList[0]
     } else {
         alert('You must select a Pod first')
     }
 }
 
 async function writeFileToPod(file, targetFileURL) {
-    
+    let resp = {error:null}
     try {
         const savedFile = await overwriteFile(
             targetFileURL,
             file,
             { contentType: file.type, fetch: session.fetch }
         )
-        const location = getSourceUrl(savedFile)        
-        newSellObj.resourceUrl = location
+        const location = getSourceUrl(savedFile) 
+        if(location){
+            console.log('savedFile', savedFile)
+            resp = {ok:true, resp: savedFile}
+            newSellObj.resourceUrl = location
+        }              
 
     } catch (error) {
         console.error(error)
+        resp.error = error
     }
+    return resp
 }
 
 async function sendNewItemInfo(fileInfo) {
@@ -281,8 +290,14 @@ async function genericPost(data, url, headers){
     return reply  
 }
 
-buttonCreate.onclick = function () {
-    createFileInfo()    
+buttonCreate.onclick = async () => {
+    const podUrl = document.getElementById('select-pod').value
+    if(podUrl){
+        const respWriteFile = await writeFileToPod(fileToSend, `${podUrl}${mediaContentPath}${fileToSend.name}`)
+        if(respWriteFile.ok){
+            await createFileInfo()
+        }        
+    }        
 }
 
 getListItems()

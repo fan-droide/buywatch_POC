@@ -124,10 +124,14 @@ app.post('/api/buy', async (req, res) => {
 
     // WebID of Buyer
     let buyerWebId = incomingData.buyerWebId
-    console.log('Buyers WebID = ', buyerWebId)
-
-    // Give Full Access to Buyer
-    await giveAccessToContent(resourceUrl, buyerWebId, session, res)
+    console.log('Buyers WebID = ', buyerWebId)    
+    
+    if(session.info.webId !== buyerWebId){
+      // Give Full Access to Buyer
+      await giveAccessToContent(resourceUrl, buyerWebId, session, res)
+    } else {
+      res.status(400).send({ error: 'Buyer cannot be the Same as Seller' })
+    }   
 
   } else {
     res.status(400).send({ error: 'Server Not Authenticated' })

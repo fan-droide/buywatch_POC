@@ -21,7 +21,7 @@ This prototype represents an original idea about how can be combined the decentr
 
 **NOTE**: do not run `npm i` otherwise the code will not work, the probelm might be related to `@inrupt/universal-fetch` and `undici` dependency
 
-Rename `config.tamplate.js` to `config.js`
+At `app/` folder, rename `config.tamplate.js` to `config.js`
 
 Get Bearer token value from `https://wallet.ilpv4.dev/`
 

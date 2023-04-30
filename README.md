@@ -1,18 +1,35 @@
-nvm use 16
+# buywatch (Proof Of Concept)
+SOLID + Web Monetization and Micropyaments for media consumption
 
-git clone https://github.com/fan-droide/buywatch_POC.git
+## Summary:
+This prototype represents an original idea about how can be combined the decentralized web and the web monetization API for micropayments with the focus on media files distribution
 
-cd buywatch_POC
+## Requirements:
+- Node.js (v16)
 
-IMPORTANT!!
-npm ci 
 
-NOTE: do not run npm i otherwise the code will not work, might be related to @inrupt/universal-fetch and undici dependency
+## How to run it locally:
 
-rename config.tamplate.js to config.js
+`nvm use 16`
 
-Get a valid PAYMENT_TOKEN from https://wallet.ilpv4.dev/
+`git clone https://github.com/fan-droide/buywatch_POC.git`
 
-npm start
+`cd buywatch_POC`
 
-Open http://localhost:3001
+**IMPORTANT!!**
+`npm ci`
+
+**NOTE**: do not run `npm i` otherwise the code will not work, the probelm might be related to `@inrupt/universal-fetch` and `undici` dependency
+
+Rename `config.tamplate.js` to `config.js`
+
+In `config.js` set a valid PAYMENT_TOKEN value from `https://wallet.ilpv4.dev/`
+
+`npm start`
+
+Open `http://localhost:3001`
+
+## Demo:
+
+
+## More info:

@@ -23,7 +23,7 @@ This prototype represents an original idea about how can be combined the decentr
 
 Rename `config.tamplate.js` to `config.js`
 
-In `config.js` set a valid PAYMENT_TOKEN value from `https://wallet.ilpv4.dev/`
+Get Bearer token value from `https://wallet.ilpv4.dev/`
 
 `npm start`
 

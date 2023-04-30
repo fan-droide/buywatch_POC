@@ -3,7 +3,7 @@
 import { buttonCreate } from './ui'
 import { initDragDropFile } from './dragdrop'
 import { session } from './login'
-import {API_URL, PAYMENT_TOKEN} from './config'
+import {API_URL} from './config'
 import {
     addUrl,
     addStringNoLocale,
@@ -33,10 +33,8 @@ const urlApiGetItems = API_URL+'/getitems'
 
 let listOfItems = {}
 
-const session_uPayment = PAYMENT_TOKEN
-
 async function createFileInfo() {
-   
+    let result = {error: null}
     const item_name = document.getElementById('itemname').value
     const item_price = document.getElementById('price').value
     const item_payment = document.getElementById('paymententry').value
@@ -47,6 +45,7 @@ async function createFileInfo() {
     try {
         myNewResource = await getSolidDataset(resourceUrl, { fetch: session.fetch })
         let items = getThingAll(myNewResource)
+        // TODO: NOT iterate and remove
         items.forEach((item) => {
             myNewResource = removeThing(myNewResource, item)
         })
@@ -79,13 +78,16 @@ async function createFileInfo() {
             const sendToBackend = await sendNewItemInfo(newSellObj)
             if(sendToBackend.ok){
                 console.log('Sent to backend ', sendToBackend)
-                getListItems()
+                result = sendToBackend
+                await getListItems()
             }   
         }
 
     } catch (error) {
         console.log(error)
+        result.error = error
     }    
+    return result
 }
 
 function handleFiles(files) {
@@ -209,18 +211,23 @@ async function startPurchaseProcess(id) {
     if(session.info.isLoggedIn){
         let fromPerson = prompt('Please enter your payment user name', '')
         if (fromPerson !== null) {
-            const thePayment = await sendMoney(id, fromPerson)
-            if(thePayment.ok){
-                console.log(thePayment)
-                // TODO: check if thePayment.resp.successfulPayment is true
-                // Ideal Flow: the buyer pays the backend and the backend pays the seller
-                // so there´s no need from the backend to validate or confirma buyer's payment
-                // it receives the money and then is able to pay the seller
-                const respAccess = await askForAccess(id)                
-                if(respAccess.ok){
-                    alert('Access Granted')
-                }                
-            }            
+            let buyerToken = prompt('Please enter your secret token', '')
+            if (buyerToken !== null) {
+                const thePayment = await sendMoney(id, fromPerson, buyerToken)
+                if(thePayment.ok){
+                    console.log(thePayment)
+                    // TODO: check if thePayment.resp.successfulPayment is true
+                    // Ideal Flow: the buyer pays the backend and the backend pays the seller
+                    // so there´s no need from the backend to validate or confirma buyer's payment
+                    // it receives the money and then is able to pay the seller
+                    const respAccess = await askForAccess(id)                
+                    if(respAccess.ok){
+                        alert('Access Granted')
+                    }                
+                }
+            } else {
+                alert('Token Is Mandatory')
+            }                  
         }
     } else {
         alert('Please Login before Buying')
@@ -250,7 +257,7 @@ async function getItemsData(_url) {
     return await response.json()
 }
 
-async function sendMoney(itemId, fromUser) {
+async function sendMoney(itemId, fromUser, paymentSession) {
     const itemIs = listOfItems[itemId]
     const amountConverted = parseFloat(itemIs.price) * 1000000000
     const dataPurchase = {
@@ -260,7 +267,7 @@ async function sendMoney(itemId, fromUser) {
     const header = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': `Bearer ${session_uPayment}`
+        'Authorization': `Bearer ${paymentSession}`
     }
     const moneyResp = await genericPost(dataPurchase, `https://hermes-rest.ilpv4.dev/accounts/${fromUser}/pay`, header)
     return moneyResp   
@@ -291,7 +298,10 @@ buttonCreate.onclick = async () => {
     if((fileToSend !== null) && item_name){
         const respWriteFile = await writeFileToPod(fileToSend, `${podUrl}${mediaContentPath}${fileToSend.name}`)
         if(respWriteFile.ok){
-            await createFileInfo()
+           const respFileInfo = await createFileInfo()
+           if(respFileInfo.ok){
+                window.location.href = '/login'
+           }
         }        
     } else {
         alert('Please attach a file and/or add a valid name')

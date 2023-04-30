@@ -1,21 +1,17 @@
 const MODE = 'DEV' // DEV, STAGE, PROD
 
 const ENVIRONMENTS = {
-    PROD : {
-        PAYMENT_TOKEN: '',
+    PROD : {      
         API_URL: ''
     },
-    STAGE : {
-        PAYMENT_TOKEN: '',
+    STAGE : {        
         API_URL: ''
     },
-    DEV: {
-        PAYMENT_TOKEN: '',
+    DEV: {        
         API_URL: 'http://localhost:3001/api'
     }
 }
 
-module.exports = {
-    PAYMENT_TOKEN: ENVIRONMENTS[MODE].PAYMENT_TOKEN,
+module.exports = {    
     API_URL: ENVIRONMENTS[MODE].API_URL  
 }

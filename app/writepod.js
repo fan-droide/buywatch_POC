@@ -40,57 +40,52 @@ async function createFileInfo() {
     const item_name = document.getElementById('itemname').value
     const item_price = document.getElementById('price').value
     const item_payment = document.getElementById('paymententry').value
-   
-    if (newSellObj.resourceUrl && item_name) {
-        const SELECTED_POD = document.getElementById('select-pod').value
-        const resourceUrl = `${SELECTED_POD}${mediaContentPath}${item_name}`
-        let myNewResource
-        try {
-            myNewResource = await getSolidDataset(resourceUrl, { fetch: session.fetch })
-            let items = getThingAll(myNewResource)
-            items.forEach((item) => {
-                myNewResource = removeThing(myNewResource, item)
-            })
-        } catch (error) {
-            if (typeof error.statusCode === 'number' && error.statusCode === 404) {
-                myNewResource = createSolidDataset()
-            } else {
-                console.error(error.message)
-            }
+       
+    const SELECTED_POD = document.getElementById('select-pod').value
+    const resourceUrl = `${SELECTED_POD}${mediaContentPath}${item_name}`
+    let myNewResource
+    try {
+        myNewResource = await getSolidDataset(resourceUrl, { fetch: session.fetch })
+        let items = getThingAll(myNewResource)
+        items.forEach((item) => {
+            myNewResource = removeThing(myNewResource, item)
+        })
+    } catch (error) {
+        if (typeof error.statusCode === 'number' && error.statusCode === 404) {
+            myNewResource = createSolidDataset()
+        } else {
+            console.error(error.message)
         }
-
-        // TODO: create a Thing with multiple attributes
-        let item = createThing({ name: 'price' })
-        item = addUrl(item, RDF.type, AS.Article)
-        item = addStringNoLocale(item, SCHEMA_INRUPT.productID, item_price)
-        myNewResource = setThing(myNewResource, item)
-
-        try {
-
-            let savedResource = await saveSolidDatasetAt(
-                resourceUrl,
-                myNewResource,
-                { fetch: session.fetch }
-            )
-            if (savedResource) {
-                newSellObj.price = item_price
-                newSellObj.name = item_name
-                newSellObj.payment = item_payment
-                newSellObj.sellerWebId = session.info.webId
-                const sendToBackend = await sendNewItemInfo(newSellObj)
-                if(sendToBackend.ok){
-                    console.log('Sent to backend ', sendToBackend)
-                    getListItems()
-                }                
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    } else {
-        alert('Please attach a file')
     }
+
+    // TODO: create a Thing with multiple attributes
+    let item = createThing({ name: 'price' })
+    item = addUrl(item, RDF.type, AS.Article)
+    item = addStringNoLocale(item, SCHEMA_INRUPT.productID, item_price)
+    myNewResource = setThing(myNewResource, item)
+
+    try {
+
+        let savedResource = await saveSolidDatasetAt(
+            resourceUrl,
+            myNewResource,
+            { fetch: session.fetch }
+        )
+        if (savedResource) {
+            newSellObj.price = item_price
+            newSellObj.name = item_name
+            newSellObj.payment = item_payment
+            newSellObj.sellerWebId = session.info.webId
+            const sendToBackend = await sendNewItemInfo(newSellObj)
+            if(sendToBackend.ok){
+                console.log('Sent to backend ', sendToBackend)
+                getListItems()
+            }   
+        }
+
+    } catch (error) {
+        console.log(error)
+    }    
 }
 
 function handleFiles(files) {
@@ -292,12 +287,15 @@ async function genericPost(data, url, headers){
 
 buttonCreate.onclick = async () => {
     const podUrl = document.getElementById('select-pod').value
-    if(podUrl){
+    const item_name = document.getElementById('itemname').value
+    if((fileToSend !== null) && item_name){
         const respWriteFile = await writeFileToPod(fileToSend, `${podUrl}${mediaContentPath}${fileToSend.name}`)
         if(respWriteFile.ok){
             await createFileInfo()
         }        
-    }        
+    } else {
+        alert('Please attach a file and/or add a valid name')
+    }      
 }
 
 getListItems()

@@ -24,7 +24,7 @@ function loginToSelectedIdP() {
 async function handleRedirectAfterLogin() {
     await session.handleIncomingRedirect({ restorePreviousSession: true })
     //session = getDefaultSession()
-    console.log('Too many loads', session)
+    //console.log('Too many loads', session)
     if (session.info.isLoggedIn) {
         document.getElementById('myWebID').value = session.info.webId
         document.getElementById('read').hidden = false

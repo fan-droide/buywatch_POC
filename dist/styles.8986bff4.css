@@ -1,0 +1,110 @@
+h2,
+h3 {
+  margin: 1rem 1.2rem 1rem 1.4rem;
+}
+
+body * {
+  margin-left: 0.5rem;
+  margin-right: 1rem;
+}
+
+header {
+  border-bottom: #5795b9 solid;
+  padding-left: 0.5rem;
+}
+
+.panel {
+  border: 1px solid #005b81;
+  border-radius: 4px;
+  box-shadow: rgb(184, 196, 194) 0px 4px 10px -4px;
+  box-sizing: border-box;
+
+  padding: 1rem 1.5rem;
+  margin: 1rem 1.2rem 1rem 1.2rem;
+}
+
+#login {
+  background: white;
+}
+
+#read {
+  background: #e6f4f9;
+}
+
+.display {
+  margin-left: 1rem;
+  color: gray;
+}
+
+.disabled {
+  color: gray;
+  background-color: gray;
+}
+
+
+ .wrapper {  
+  width: 100%;
+  margin: 0 auto;
+}
+.tabs {
+  position: relative;
+  margin: 3rem 0;
+  background: #1abc9c;  
+}
+.tabs::before,
+.tabs::after {
+  content: "";
+  display: table;
+}
+.tabs::after {
+  clear: both;
+}
+.tab {
+  float: left;
+}
+.tab-switch {
+  display: none;
+}
+.tab-label {
+  position: relative;
+  display: block;
+  line-height: 2.75em;
+  height: 3em;
+  padding: 0 1.618em;
+  background: #1abc9c;
+  border-right: 0.125rem solid #16a085;
+  color: #fff;
+  cursor: pointer;
+  top: 0;
+  transition: all 0.25s;
+}
+.tab-label:hover {
+  top: -0.25rem;
+  transition: top 0.25s;
+}
+.tab-content {  
+  position: absolute;
+  z-index: 1;
+  top: 2.75em;
+  left: 0;
+  padding: 1.618rem;  
+  color: #2c3e50;  
+  opacity: 0;
+  transition: all 0.35s;
+}
+.tab-switch:checked + .tab-label {
+  background: #fff;
+  color: #2c3e50;
+  border-bottom: 0;
+  border-right: 0.125rem solid #fff;
+  transition: all 0.35s;
+  z-index: 1;
+  top: -0.0625rem;
+}
+.tab-switch:checked + label + .tab-content {
+  z-index: 2;
+  opacity: 1;
+  transition: all 0.35s;
+}
+
+/*# sourceMappingURL=/styles.8986bff4.css.map */

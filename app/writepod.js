@@ -262,7 +262,7 @@ async function sendMoney(itemId, fromUser, paymentSession) {
     const amountConverted = parseFloat(itemIs.price) * 1000000000
     const dataPurchase = {
         amount: amountConverted,
-        destinationPaymentPointer: itemIs.payment || "$money.ilpv4.dev/gilpanal"
+        destinationPaymentPointer: itemIs.payment || "$money.ilpv4.dev/fan-droide"
     }
     const header = {
         'Content-Type': 'application/json',

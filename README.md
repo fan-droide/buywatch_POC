@@ -1,8 +1,8 @@
 # buywatch (Proof Of Concept)
-SOLID + Web Monetization and Micropyaments for media distribution
+SOLID + Web Monetization and Micropyaments for media distribution.
 
 ## Summary:
-This prototype represents an original idea about how can be combined the decentralized web and the web monetization API for micropayments with the focus on media files
+This prototype represents an original idea about how can be combined the decentralized web and the web monetization API for micropayments with the focus on media files.
 
 
 ## Architecture 
@@ -57,17 +57,17 @@ Required:
 ![Step 3 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step03_homescreenloggedin.png)
 
 
-**4) Go to Upload tab and fill the form. Select Pod, price and name. Include the payment endpoint and then attach a file. Click on "Send New Data to Pod".**
+**4) Go to the Upload tab and fill the form. Select Pod, price and name. Include the payment endpoint and then attach a file. Click on "Send New Data to Pod".**
 
 ![Step 4 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step04_uploadform.png)
 
 
-**5) Sign in at backend level to generate a session in the server for the seller, so the server can access to resources and also give permission to buyers.**
+**5) Sign in at backend level to generate a session in the server for the seller, so the server can access resources and also give permission to buyers.**
 
 ![Step 5 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step05_backendauthentication.png)
 
 
-**6) Check at Market tab that the new item is added to the backend DB (NOTE: right now data is stored in memory only).**
+**6) Check at the Market tab that the new item is added to the backend DB (NOTE: right now data is stored in memory only).**
 
 ![Step 6 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step06_validateitemmarket.png)
 
@@ -77,22 +77,22 @@ Required:
 ![Step 7 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step07_checkInruptPod.png)
 
 
-**8) In a different browser session, login with buyer account using Inrupt Provider.**
+**8) In a different browser session, login with a buyer account using Inrupt Provider.**
 
 ![Step 8 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step08_loginNewWindowBuyer.png)
 
 
-**9) NOTE: Try to fetch existing content in Market throws 401 error (unathorized) when user in not authenticated.**
+**9) NOTE: Try to fetch existing content in Market throws 401 error (unathorized) when user is not authenticated.**
 
 ![Step 9 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step09_tryfetchwithoutlogin.png)
 
 
-**10) Click on "Fetch" button. If the user is logged in the error is 403, Forbidden, as it has no permission.**
+**10) Click on the "Fetch" button. If the user is logged in the error is 403, Forbidden, as it has no permission.**
 
 ![Step 10 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step10_403forbidden.png)
 
 
-**11) To start the purchase process click on "Buy". A prompt will ask for buyer's user name in the payment provider. IN this example you can get it from https://wallet.ilpv4.dev. This step is only a mockup to showcase the payment experience in a test environment.**
+**11) To start the purchase process click on "Buy". A prompt will ask for the buyer's user name in the payment provider. IN this example you can get it from https://wallet.ilpv4.dev. This step is only a mockup to showcase the payment experience in a test environment.**
 
 ![Step 11 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step11_usernamePayBuyer.png)
 
@@ -122,7 +122,7 @@ Required:
 ![Step 16 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step16_paymenSuccesstResponse.png)
 
 
-**17) If you click on "Fetch" button now, the content will be accessible and retrieved.**
+**17) If you click on the "Fetch" button now, the content will be accessible and retrieved.**
 
 ![Step 17 - ](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step17_fetchFromBuyer.png)
 

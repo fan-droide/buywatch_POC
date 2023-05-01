@@ -21,6 +21,9 @@
     "buffer": "^6.0.3",
     "parcel-bundler": "^1.12.5"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "browserslist": [
     "last 3 and_chr versions",
     "last 3 chrome versions",

@@ -7,7 +7,7 @@ This prototype represents an original idea about how can be combined the decentr
 
 ## Architecture 
 
-![Architecture Diagram](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/architecture.jpg)
+![Architecture Diagram](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/architecture_diagram.jpg)
 
 ## Requirements:
 - Node.js (v16)

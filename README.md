@@ -1,6 +1,8 @@
 # buywatch (Proof Of Concept)
 SOLID + Web Monetization and Micropyaments for media distribution.
 
+[![Watch the demo video](https://raw.githubusercontent.com/fan-droide/buywatch_POC/main/screenshots/step04_uploadform.png)](https://youtu.be/x0xWy5PDFhQ)
+
 ## Summary:
 This prototype represents an original idea about how can be combined the decentralized web and the web monetization API for micropayments with the focus on media files.
 
